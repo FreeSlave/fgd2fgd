@@ -1,4 +1,5 @@
 #include "util.h"
+#include <algorithm>
 
 bool isNumeric(const std::string& s)
 {

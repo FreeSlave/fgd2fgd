@@ -4,6 +4,7 @@
 #include <regex>
 #include <iostream>
 #include <fstream>
+#include <charconv>
 
 std::vector<std::string> splitStringIgnoringQuotes(const std::string& str, const std::string& delimitter)
 {
@@ -748,17 +749,20 @@ void Fgd::parseChoicesOrFlags(KeyvalueDef& outKey)
 
 	KeyvalueChoice def;
 
-	if (keyParts[0].find('\"') != std::string::npos)
+	int integerValue = 0;
+	auto fromCharsResult = std::from_chars(keyParts[0].c_str(), keyParts[0].c_str() + keyParts[0].size(), integerValue);
+
+	if (fromCharsResult.ec == std::errc())
 	{
-		def.svalue = getValueInQuotes(keyParts[0]);
-		def.ivalue = 0;
-		def.isInteger = false;
+		def.svalue = trimSpaces(keyParts[0]);
+		def.ivalue = integerValue;
+		def.isInteger = true;
 	}
 	else
 	{
-		def.svalue = trimSpaces(keyParts[0]);
-		def.ivalue = atoi(keyParts[0].c_str());
-		def.isInteger = true;
+		def.svalue = getValueInQuotes(trimSpaces(keyParts[0]));
+		def.ivalue = 0;
+		def.isInteger = false;
 	}
 
 	if (keyParts.size() > 1)

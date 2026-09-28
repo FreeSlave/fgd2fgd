@@ -127,7 +127,21 @@ void writefgd(std::ostream& stream, const Fgd& fgd, EditorType editorType)
                 stream << "\t[\n";
                 for (KeyvalueChoice& choice : keyvalue.choices)
                 {
-                    stream << "\t\t" << choice.ivalue << " : \"" << choice.name << "\"\n";
+                    stream << "\t\t";
+                    if (choice.isInteger)
+                    {
+                        stream << choice.ivalue;
+                    }
+                    else
+                    {
+                        stream << "\"" << choice.svalue << "\"";
+                    }
+                    stream << " : \"" << choice.name << "\"";
+                    if (keyvalue.name == "spawnflags")
+                    {
+                        stream << " : " << choice.sdefvalue;
+                    }
+                    stream << "\n";
                 }
                 stream << "\t]";
             }

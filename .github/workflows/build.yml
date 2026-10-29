@@ -15,6 +15,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Install fmt on Ubuntu
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libfmt-dev
+
+    - name: Install fmt on Windows
+      if: startsWith(matrix.os, 'windows')
+      run: vcpkg install fmt
+
     - name: Build
       run: |
         cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -B build -S .

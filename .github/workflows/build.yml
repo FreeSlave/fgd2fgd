@@ -25,7 +25,14 @@ jobs:
       if: startsWith(matrix.os, 'windows')
       run: vcpkg install fmt
 
-    - name: Build
+    - name: Build on Linux
+      if: startsWith(matrix.os, 'ubuntu')
       run: |
         cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -B build -S .
+        cmake --build build --target all
+
+    - name: Build on Windows
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Release -B build -S . -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake --build build --target all

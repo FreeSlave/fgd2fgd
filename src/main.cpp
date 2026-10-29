@@ -111,9 +111,18 @@ void writefgd(std::ostream& stream, const Fgd& fgd, EditorType editorType)
 
             if (keyvalue.name != "spawnflags")
             {
-                stream <<  " : \"" << keyvalue.shortDescription << "\"";
+                stream <<  " : \"";
+                if (editorType == EditorType::NetRadiant && !keyvalue.defaultValue.empty() && trimSpaces(keyvalue.defaultValue) != "0")
+                {
+                    stream << keyvalue.shortDescription << " [explicit default value: " << trimQuotes(keyvalue.defaultValue) << "]";
+                }
+                else
+                {
+                    stream << keyvalue.shortDescription;
+                }
+                stream << "\"";
             }
-            if (!keyvalue.defaultValue.empty())
+            if (!keyvalue.defaultValue.empty() && editorType != EditorType::NetRadiant)
             {
                 stream << " : ";
                 if (keyvalue.iType == FGD_KEY_INTEGER || keyvalue.iType == FGD_KEY_CHOICES)
@@ -136,10 +145,18 @@ void writefgd(std::ostream& stream, const Fgd& fgd, EditorType editorType)
                     {
                         stream << "\"" << choice.svalue << "\"";
                     }
-                    stream << " : \"" << choice.name << "\"";
+                    stream << " : \"" << choice.name;
+                    if (editorType == EditorType::NetRadiant && keyvalue.name == "spawnflags")
+                    {
+                        if (!choice.sdefvalue.empty() && trimSpaces(choice.sdefvalue) != "0")
+                        {
+                            stream << " [recommended default]";
+                        }
+                    }
+                    stream << "\"";
                     if (keyvalue.name == "spawnflags")
                     {
-                        stream << " : " << choice.sdefvalue;
+                        stream << " : " << choice.sdefvalue.empty() ? "0" : choice.sdefvalue;
                     }
                     stream << "\n";
                 }

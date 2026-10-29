@@ -50,3 +50,20 @@ std::string trimSpaces(const std::string& str)
 	}
 	return result;
 }
+
+std::string trimQuotes(const std::string& str)
+{
+	if (str.empty())
+	{
+		return str;
+	}
+
+	std::string result = str;
+	while (!result.empty() && result.front() == '\"') {
+		result.erase(result.begin());
+	}
+	while (!result.empty() && result.back() == '\"') {
+		result.pop_back();
+	}
+	return result;
+}

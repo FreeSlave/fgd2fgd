@@ -25,3 +25,4 @@ bool isNumeric(const std::string& s);
 void replaceAll(std::string& str, const std::string& from, const std::string& to);
 std::string toLowerCase(const std::string& s);
 std::string trimSpaces(const std::string& str);
+std::string trimQuotes(const std::string& str);

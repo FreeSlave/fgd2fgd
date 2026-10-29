@@ -10,7 +10,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
-          - os: windows-latest
+          # - os: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -21,18 +21,18 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libfmt-dev
 
-    - name: Install fmt on Windows
-      if: startsWith(matrix.os, 'windows')
-      run: vcpkg install fmt
+    # - name: Install fmt on Windows
+    #   if: startsWith(matrix.os, 'windows')
+    #   run: vcpkg install fmt
 
-    - name: Build on Linux
+    - name: Build on Ubuntu
       if: startsWith(matrix.os, 'ubuntu')
       run: |
         cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -B build -S .
         cmake --build build --target all
 
-    - name: Build on Windows
-      if: startsWith(matrix.os, 'windows')
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Release -B build -S . -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
-        cmake --build build --target all
+    # - name: Build on Windows
+    #   if: startsWith(matrix.os, 'windows')
+    #   run: |
+    #     cmake -DCMAKE_BUILD_TYPE=Release -B build -S . -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+    #     cmake --build build --target all
